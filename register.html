@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARAhelp Sign Up</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('back.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .signup-container {
+            width: 500px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h2 {
+            color: #007BFF;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"] {
+            width: 90%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 18px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2 id="signup-header">PARAhelp Sign Up</h2>
+        <form action="P.html" method="POST">
+            <input type="text" id="fullname" name="fullname" placeholder="Full Name" required>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="submit" id="signup-btn" value="Sign Up">
+        </form>
+        <div class="message">
+            <p id="login-message">Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Function to get the language from URL parameter
+        function getLanguage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('lang') || 'en';
+        }
+
+        // Change the signup page content based on the selected language
+        function setLanguageContent(lang) {
+            const signupHeader = document.getElementById('signup-header');
+            const loginMessage = document.getElementById('login-message');
+            const fullnameInput = document.getElementById('fullname');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const signupButton = document.getElementById('signup-btn');
+
+            if (lang === 'en') {
+                signupHeader.textContent = "PARAhelp Sign Up";
+                fullnameInput.placeholder = "Full Name";
+                usernameInput.placeholder = "Username";
+                passwordInput.placeholder = "Password";
+                signupButton.value = "Sign Up";
+                loginMessage.innerHTML = 'Already have an account? <a href="login.html">Login here</a>';
+            } else if (lang === 'mr') {
+                signupHeader.textContent = "PARAhelp साइन अप";
+                fullnameInput.placeholder = "पूर्ण नाव";
+                usernameInput.placeholder = "वापरकर्ता नाव";
+                passwordInput.placeholder = "पासवर्ड";
+                signupButton.value = "साइन अप करा";
+                loginMessage.innerHTML = 'तुमचं अकाऊंट आहे का? <a href="login.html">इथे लॉगिन करा</a>';
+            } else if (lang === 'hi') {
+                signupHeader.textContent = "PARAhelp साइन अप";
+                fullnameInput.placeholder = "पूरा नाम";
+                usernameInput.placeholder = "उपयोगकर्ता नाम";
+                passwordInput.placeholder = "पासवर्ड";
+                signupButton.value = "साइन अप करें";
+                loginMessage.innerHTML = 'पहले से अकाउंट है? <a href="login.html">यहां लॉगिन करें</a>';
+            }
+        }
+
+        // Set the language content based on the URL parameter
+        const language = getLanguage();
+        setLanguageContent(language);
+    </script>
+
+</body>
+</html>

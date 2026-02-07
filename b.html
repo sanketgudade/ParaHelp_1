@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Focus Shift</title>
+    <style>
+        .icon {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: lightgray;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .focused {
+            border: 2px solid blue;
+        }
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="icon1" class="icon" tabindex="0" data-message="Icon 1 Message" data-voice="icon1.mp3">Icon 1</div>
+    <div id="icon2" class="icon" tabindex="0" data-message="Icon 2 Message" data-voice="icon2.mp3">Icon 2</div>
+    <div id="icon3" class="icon" tabindex="0" data-message="Icon 3 Message" data-voice="icon3.mp3">Icon 3</div>
+
+    <div class="message" id="messageBox">Click or press Enter on any icon</div>
+
+    <script>
+        const icons = document.querySelectorAll('.icon');
+        let currentIndex = 0;
+        let interval;
+
+        // Function to remove focus highlight from all icons
+        function removeFocus() {
+            icons.forEach(icon => icon.classList.remove('focused'));
+        }
+
+        // Function to set focus highlight to the next icon
+        function setFocus(index) {
+            removeFocus();
+            icons[index].classList.add('focused');
+            icons[index].focus();
+        }
+
+        // Function to display the message and play voice note
+        function displayMessageAndPlayVoice(icon) {
+            const message = icon.getAttribute('data-message');
+            const voiceNote = icon.getAttribute('data-voice');
+            
+            document.getElementById('messageBox').innerText = message;
+            
+            // Play voice note
+            const audio = new Audio(voiceNote);
+            audio.play();
+        }
+
+        // Automatically shift focus every 5 seconds
+        function startFocusShift() {
+            interval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % icons.length;
+                setFocus(currentIndex);
+            }, 5000); // Shift focus every 5 seconds
+        }
+
+        // Add event listener for Enter key press
+        icons.forEach((icon, index) => {
+            icon.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    displayMessageAndPlayVoice(icon);
+                }
+            });
+
+            // Add click event listener
+            icon.addEventListener('click', () => {
+                displayMessageAndPlayVoice(icon);
+            });
+        });
+
+        // Initially set focus to the first icon
+        setFocus(currentIndex);
+
+        // Start automatic focus shifting
+        startFocusShift();
+    </script>
+
+</body>
+</html>

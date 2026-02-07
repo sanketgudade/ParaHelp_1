@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>दैनिक गतिविधि ट्रैकर</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('b2.jpg'); /* यहाँ अपनी छवि का पथ बदलें */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* थोड़ा पारदर्शी पृष्ठभूमि */
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            margin-top: 50px; /* ऊपर की ओर स्पेसिंग को समायोजित करें */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        input[type="time"], input[type="text"] {
+            padding: 5px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007BFF; /* नीला रंग */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* पॉपअप स्टाइल */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #007BFF; /* नीला रंग */
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .popup.active {
+            display: block;
+        }
+
+        .popup button {
+            background-color: white;
+            color: #007BFF;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* तैरता हुआ + बटन */
+        .add-activity-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* कस्टम गतिविधियों की सूची */
+        #customActivities {
+            margin-top: 20px;
+        }
+
+        .activity {
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .delete-option {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: red;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .activity:hover .delete-option {
+            display: block;
+        }
+
+        .activity-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .activity-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body onload="loadActivities()">
+    <div class="container">
+        <h1>दैनिक गतिविधि ट्रैकर</h1>
+
+        <!-- उपयोगकर्ता द्वारा जोड़ी गई कस्टम गतिविधियाँ -->
+        <div id="customActivities"></div>
+        
+        <form id="activityForm">
+            <label for="wakeUp">जागने का समय:</label>
+            <input type="time" id="wakeUp" name="wakeUp"><br><br>
+
+            <label for="bathTime">नहाने का समय:</label>
+            <input type="time" id="bathTime" name="bathTime"><br><br>
+
+            <button type="button" onclick="saveActivity()">गतिविधि सहेजें</button>
+        </form>
+
+        <!-- पुष्टि के लिए पॉपअप -->
+        <div id="popup" class="popup">
+            गतिविधि सफलतापूर्वक सहेजी गई!
+            <br>
+            <button onclick="confirmPopup()">ठीक है</button>
+        </div>
+    </div>
+
+    <!-- नई गतिविधियों को जोड़ने के लिए + बटन -->
+    <button class="add-activity-btn" onclick="addNewActivity()">+</button>
+
+    <script>
+        // पृष्ठ लोड होने पर गतिविधियों को localStorage से लोड करें
+        function loadActivities() {
+            const savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            savedActivities.forEach(activity => {
+                addActivityElement(activity.name, activity.time);
+            });
+        }
+
+        function saveActivity() {
+            const wakeUp = document.getElementById('wakeUp').value;
+            const bathTime = document.getElementById('bathTime').value;
+
+            // पॉपअप दिखाएँ
+            document.getElementById('popup').classList.add('active');
+
+            // यदि कोई समय भरा है तो गतिविधियों को localStorage में भी सहेजें
+            if (wakeUp) {
+                saveActivityToLocalStorage('जागने का समय', wakeUp);
+                addActivityElement('जागने का समय', wakeUp);
+            }
+            if (bathTime) {
+                saveActivityToLocalStorage('नहाने का समय', bathTime);
+                addActivityElement('नहाने का समय', bathTime);
+            }
+        }
+
+        function confirmPopup() {
+            closePopup();
+            // xyz.html पर पुनर्निर्देशित करें
+            window.location.href = 'mainhindi.html';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').classList.remove('active');
+        }
+
+        function addNewActivity() {
+            const name = prompt("कृपया गतिविधि का नाम दर्ज करें:");
+            if (name) {
+                const convertedName = convertToHindi(name);
+                const time = prompt("कृपया गतिविधि का समय (HH:MM) दर्ज करें:");
+                if (time) {
+                    addActivityElement(convertedName, time);
+                    saveActivityToLocalStorage(convertedName, time);
+                }
+            }
+        }
+
+        const translationDict = {
+            "play": "खेलना",
+            "sing": "गाना",
+            "dance": "नृत्य करना",
+            "exercise": "व्यायाम करना",
+            "medicine": "दवा लेना",
+            "breakfast": "नाश्ता",
+            "dinner": "रात का खाना",
+            "lunch": "दोपहर का खाना",
+            "nap": "झपकी लेना",
+            "eat": "खाना",
+            "sleep": "सोना",
+            "study": "अध्ययन करना",
+            "work": "काम करना",
+            "run": "दौड़ना",
+            "walk": "चलना",
+            "read": "पढ़ना",
+        };
+
+        function convertToHindi(name) {
+            return translationDict[name.toLowerCase()] || name;
+        }
+
+        function addActivityElement(name, time) {
+            const customActivityDiv = document.createElement('div');
+            customActivityDiv.classList.add('activity');
+            customActivityDiv.innerHTML = `
+                <span class="activity-name">${name}</span>
+                <input type="time" class="activity-time" value="${time}" onchange="updateActivityTime(this, '${name}')">
+                <div class="delete-option" onclick="deleteActivity(this)">हटाएँ</div>
+            `;
+
+            // "गतिविधि सहेजें" बटन से पहले नई गतिविधि डालें
+            const customActivitiesDiv = document.getElementById('customActivities');
+            customActivitiesDiv.appendChild(customActivityDiv); // Append the new activity div
+        }
+
+        function saveActivityToLocalStorage(name, time) {
+            const savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            savedActivities.push({ name, time });
+            localStorage.setItem('customActivities', JSON.stringify(savedActivities));
+        }
+
+        function updateActivityTime(element, name) {
+            const newTime = element.value;
+            updateActivityTimeInLocalStorage(name, newTime);
+        }
+
+        function updateActivityTimeInLocalStorage(name, newTime) {
+            let savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            savedActivities = savedActivities.map(activity => {
+                if (activity.name === name) {
+                    activity.time = newTime;
+                }
+                return activity;
+            });
+            localStorage.setItem('customActivities', JSON.stringify(savedActivities));
+        }
+
+        function deleteActivity(element) {
+            element.parentElement.remove();
+
+            // Remove the activity from localStorage
+            const name = element.parentElement.querySelector('.activity-name').textContent;
+            removeActivityFromLocalStorage(name);
+        }
+
+        function removeActivityFromLocalStorage(name) {
+            const savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            const updatedActivities = savedActivities.filter(activity => activity.name !== name);
+            localStorage.setItem('customActivities', JSON.stringify(updatedActivities));
+        }
+    </script>
+</body>
+</html>

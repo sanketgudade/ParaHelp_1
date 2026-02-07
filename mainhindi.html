@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistive Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('back1.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .settings-icon {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.settings-icon:hover {
+    background-color: #0056b3;
+}
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Ensure all icons fit in responsive grid */
+            gap: 20px;
+            justify-items: center;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .button {
+            width: 150px;
+            height: 150px;
+            background-size: cover;
+            border: 3px solid black;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .button-label {
+            position: absolute;
+            bottom: 10px; 
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            background-color: #c6e020e8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #message-container {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh;
+        }
+
+        #message {
+            font-size: 32px;
+            color: #180101;
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 20px 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 750px; /* Fixed width */
+            max-width: 750px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+
+        
+
+        /* Focus highlight style */
+        .focused {
+            outline: 10px solid rgba(11, 242, 42, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <h1><u>हम यहां आपकी सहायता के लिए उपलब्ध हैं।</u></h1>
+
+    <div class="container" id="buttonContainer">
+        <!-- Icon Buttons -->
+        <button class="button" data-message="मुझे खाना चाहिए|" data-audio="मुझे खाना चाहिए.mp3" style="background-image: url('food.png');">
+            <span class="button-label">खाना</span>
+        </button>
+        <button class="button" data-message="मुझे टॉयलेट जाना है|" data-audio="मुझे टॉयलेट जाना है.mp3"" style="background-image: url('toilet.png');">
+            <span class="button-label">टॉयलेट</span>
+        </button>
+        <button class="button" data-message="कृपया मेरे कपड़े बदल दीजिए|"data-audio="कृपया मेरे कपड़े बदल दीजिए.mp3" style="background-image: url('clothes.png');">
+            <span class="button-label">कपड़े</span>
+        </button>
+        <button class="button" data-message="मुझे बाहर जाना है|" data-audio="मुझे बाहर जाना है.mp3" style="background-image: url('outside.png');">
+            <span class="button-label">बाहर</span>
+        </button>
+        <button class="button" data-message="मुझे चाय चाहिए|" data-audio="मुझे चाय चाहिए.mp3" style="background-image: url('tea.png');">
+            <span class="button-label">चाय</span>
+        </button>
+        <button class="button" data-message="मुझे दूध चाहिए|" data-audio="मुझे दूध चाहिए.mp3" style="background-image: url('milk.png');">
+            <span class="button-label">दूध</span>
+        </button>
+        <button class="button" data-message="मुझे पानी चाहिए|" data-audio="मुझे पानी चाहिए.mp3" style="background-image: url('water.png');">
+            <span class="button-label">पानी</span>
+        </button>
+        <button class="button" data-message="मुझे मदत चाहिए|" data-audio="मुझे मदत चाहिए .mp3" style="background-image: url('help.png');">
+            <span class="button-label">मदत</span>
+        </button>
+        <button class="button" data-message="मुझे आराम करना है|" data-audio="मुझे आराम करना है.mp3" style="background-image: url('rest.png');">
+            <span class="button-label">आराम</span>
+        </button>
+        <button class="button" data-message="मुझे असुविधाजनक जैसा महसूस हो रहा है|" data-audio="मुझे असुविधाजनक जैसा महसूस हो रहा है.mp3" style="background-image: url('uncomfortable.png');">
+            <span class="button-label">असुविधाजनक</span>
+        </button>
+        <button class="button" data-message="मैं खुश हूँ|" data-audio="मैं खुश हूँ.mp3" style="background-image: url('happy.png');">
+            <span class="button-label">खुश</span>
+        </button>
+        <button class="button" data-message="मैं दुखी हूँ|" data-audio="मैं दुखी हूँ.mp3" style="background-image: url('sad.png');">
+            <span class="button-label">दुखी</span>
+        </button>
+        <button class="button" data-message="मुझे ठंड लग रही है|" data-audio="मुझे ठंड लग रही है.mp3" style="background-image: url('cold.png');">
+            <span class="button-label">ठंड</span>
+        </button>
+        <button class="button" data-message="मुझे गर्मी हो रही है" data-audio="मुझे गर्मी हो रही है.mp3" style="background-image: url('hot.png');">
+            <span class="button-label">गर्मी</span>
+        </button>
+        <button class="button" data-message="मुझे दवाई की ज़रूरत है" data-audio="मुझे दवाई की ज़रूरत है.mp3" style="background-image: url('medication.png');">
+            <span class="button-label">दवाई</span>
+        </button>
+        <button class="button" data-message="मुझे बात करनी है|" data-audio="मुझे बात करनी है.mp3" style="background-image: url('talk.png');">
+            <span class="button-label">बात</span>
+        </button>
+
+        <!-- Social Media and Other Buttons -->
+        <button class="button" data-audio="_.mp3" style="background-image: url('instagram.png');" onclick="window.open('https://www.instagram.com', '_blank')">
+            <span class="button-label">इंस्टाग्राम</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('youtube.png');" onclick="window.open('https://www.youtube.com', '_blank')">
+            <span class="button-label">यूट्यूब</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('netflix.png');" onclick="window.open('https://www.netflix.com', '_blank')">
+            <span class="button-label">नेटफ्लिक्स</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('spotify.png');" onclick="window.open('https://www.spotify.com', '_blank')">
+            <span class="button-label">स्पोटिफाई</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('snapchat.png');" onclick="window.open('https://www.snapchat.com', '_blank')">
+            <span class="button-label">स्नॅपचॅट</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('news.png');" onclick="window.open('https://www.bbc.com/news', '_blank')">
+            <span class="button-label">समाचार</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('drama.png');" onclick="window.open('https://offline-dino-game.firebaseapp.com/', '_blank')">
+            <span class="button-label">गेम्स</span>
+        </button>
+        <button class="button" data-audio="_.mp3" style="background-image: url('bhajan.png');" onclick="window.open('https://www.bhajan.com', '_blank')">
+            <span class="button-label">भजन</span>
+        </button>
+    </div>
+
+<div id="message-container">
+    <div id="message"></div>
+</div>
+<i class="fas fa-cog settings-icon" onclick="openSettingsPage()"></i>
+
+<script>
+    const buttons = document.querySelectorAll('.button');
+    let currentIndex = 0;
+    let interval;
+
+    // Function to remove focus highlight from all buttons
+    function removeFocus() {
+        buttons.forEach(button => button.classList.remove('focused'));
+    }
+
+    // Function to set focus highlight to the next button
+    function setFocus(index) {
+        removeFocus();
+        buttons[index].classList.add('focused');
+        buttons[index].focus();
+    }
+
+    // Function to display the message and play voice note
+    function displayMessageAndPlayVoice(button) {
+        const message = button.getAttribute('data-message');
+        const voiceNote = button.getAttribute('data-audio');
+        
+        document.getElementById('message').innerText = message;
+        
+        // Play voice note
+        const audio = new Audio(voiceNote);
+        audio.play();
+    }
+
+    // Automatically shift focus every 5 seconds
+    function startFocusShift() {
+        interval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % buttons.length;
+            setFocus(currentIndex);
+        }, 5000); // Shift focus every 5 seconds
+    }
+
+    // Add event listener for Enter key press
+    buttons.forEach((button, index) => {
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                displayMessageAndPlayVoice(button);
+            }
+        });
+
+        // Add click event listener
+        button.addEventListener('click', () => {
+            displayMessageAndPlayVoice(button);
+        });
+    });
+
+    // Initially set focus to the first button
+    setFocus(currentIndex);
+
+    // Start automatic focus shifting
+    startFocusShift();
+
+    function openSettingsPage() {
+            // Redirect to another page when settings icon is clicked
+            window.location.href = "DAH.html"; // Replace with the actual file path you want to open
+        }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAIN PAGE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('web.jpg'); 
+            background-size: cover; /* Ensure the image covers the entire page */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent image repeating */
+            background-attachment: fixed; /* Make the background fixed when scrolling */
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+            justify-content: flex-start; /* Align items to the top */
+            height: 100vh; /* Full viewport height */
+            padding-top: 20px; /* Add some space at the top */
+        }
+
+        /* Styling for the navigation menu */
+        .navbar {
+            display: flex;
+            justify-content: center; /* Center the navbar */
+            align-items: center;
+            padding: 20px; /* Adjust padding */
+            margin-top: 20px; /* Space above the navbar */
+            width: 100%; /* Full width */
+            position: relative;
+        }
+
+        /* Hamburger button */
+        .hamburger {
+            display: none; /* Hide hamburger by default */
+            font-size: 64px; /* Size of the hamburger icon */
+            cursor: pointer;
+            color: rgb(21, 18, 18);
+            position: absolute;
+            top: px; /* Adjust this value to move it lower */
+            right: 20px; /* Align to the right */
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        /* Menu links */
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 20px; /* Adjust gap */
+        }
+
+        .nav-links li {
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: black; /* Changed text color to black */
+            text-decoration: none;
+            padding: 10px;
+            background-color: white; /* Set background color to white */
+            font-size: 20px; /* Adjusted size */
+        }
+
+        .nav-links a:hover {
+            background-color: #f5e7e7;
+        }
+
+        /* Show hamburger only on screens smaller than 1200px */
+        @media (max-width: 1200px) {
+            .hamburger {
+                display: block; /* Show hamburger only on mobile/tablet */
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                top: 150px; /* Move the menu down */
+                right: 0;
+                background-color: white;
+                width: 100%;
+                padding: 20px 0;
+                border: 1px solid #ccc;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+        }
+
+        .content {
+            color: white; /* Ensure the text is visible over the background image */
+            text-align: center; /* Center text in content */
+            padding: 20px; /* Space around the content */
+        }
+
+        /* Styling for the About content */
+        .about-content {
+            display: none; /* Hide by default */
+            color: black; /* Set text color for About content */
+            margin-top: 20px; /* Space above the About content */
+            background-color: white; /* Background color for visibility */
+            padding: 100px; /* Padding for the About content */
+            border-radius: 50px; /* Rounded corners */
+            width: 80%; /* Adjust width */
+            text-align: left;
+            font-size: 24px; /* Left align text */
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            font-weight: bold; /* Optional: make text bold */
+        }
+
+        /* Style for the image inside About content */
+        .about-image {
+            max-width: 70%; /* Ensure image doesn't exceed container width */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Make the image block-level */
+            margin: 20px auto; /* Center the image and add space above/below */
+            border-radius: 10px; /* Optional: Add rounded corners */
+        }
+
+        /* Style for the image caption */
+        .image-caption {
+            text-align: center; /* Center the caption text */
+            font-size: 16px; /* Adjust caption text size */
+            color: gray; /* Caption text color */
+            margin-top: 10px; /* Space between the image and the caption */
+            font-style: italic; /* Optional: Italicize the caption */
+        }
+
+        .header {
+    width: 100%; /* Full width of the page */
+    position: relative; /* Changed from fixed to relative */
+    background-color: transparent; /* Transparent background */
+    text-align: center; /* Center the title */
+}
+
+.header h1 {
+    color: black; /* Black color for the title text */
+    font-size: 34px; /* Adjust title size */
+    margin: 0;
+    padding: 10px 0; /* Space around the text */
+}
+
+        /* Push content down to avoid overlap with header */
+        body {
+            margin: 0;
+            padding-top: 50px; /* Adjust based on the header height */
+        }
+
+        .homepage-image {
+            max-width: 100%; /* Responsive width */
+            height: auto; /* Maintain aspect ratio */
+            margin: 20px 0; /* Add some space above and below */
+            display: block; /* Center image */
+            margin-left: auto; /* Center image */
+            margin-right: auto; /* Center image */
+        }
+
+        .image-bottom-container {
+    width: 30%;
+    position: relative;
+    bottom: 0;
+    text-align: center; /* Center the image */
+}
+
+.bottom-image {
+    max-width: 100%; /* Responsive width */
+    height: auto; /* Maintain aspect ratio */
+    margin: 20px 0; /* Add some space above and below */
+    display: block; /* Center the image */
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Header with title only -->
+    <div class="header">
+        <h1> Digital Support for Living Persons with Mobility Impairments</h1> <!-- Replace with your title -->
+    </div>
+
+    <!-- Hamburger menu and navigation -->
+    <nav class="navbar">
+        <div class="hamburger" id="hamburger">&#9776;</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#" id="nav-home">Home</a></li> <!-- Update this to your main page URL -->
+            
+            <!--<li><a href="signup.html" id="nav-register">Sign up</a></li>-->
+            <li><a href="http://localhost/PARA/login.html" id="nav-login">Login</a></li>
+            <li><a href="Help1.html" id="nav-help">Help</a></li>
+            <li><a href="Contact.html" id="nav-contact">Contact</a></li>
+            <li><a href="Dev.html" id="nav-team">Team</a></li>
+            <li><a href="#" id="nav-about">About</a></li>
+
+        </ul>
+    </nav>
+    
+    <div class="image-container">
+        <img src="website2.jpg" alt="Description of the image" class="homepage-image" id="home-image">
+    </div>
+
+    <!-- About content -->
+    <div class="about-content" id="about-content">
+        <h1>Welcome to ParaHelp!</h1>
+        <p>At ParaHelp, our mission is to provide persons with mobility impairments the tools and support they need to communicate effectively and manage their daily activities with enhanced independence.</p>
+        <h4>We leverage two innovative technologies to empower our users:</h4>
+        <p> <span class="highlight">1.Capacitive Touch Sensor –</span> This device allows users to control and communicate using finger touch only.It offers a user-friendly interface for various tasks.</p>
+        <img src="C:\Users\HP\OneDrive\Desktop\PARA1\Screenshot 2024-10-16 085642.png" alt="About ParaHelp" class="about-image">
+        
+        <!-- Image caption (descriptive text for the image) -->
+        <p class="image-caption">Capacitive Touch Sensor</p>
+        <br></br>
+        <p> <span class="highlight">Eye-Blinking Input Glasses –</span>A specialized tool designed to help users communicate through eye blinks, enabling seamless interaction with their environment.</p>
+        <img src="C:\Users\HP\OneDrive\Desktop\PARA1\Screenshot 2024-10-16 092839.png" alt="About ParaHelp" class="about-image">
+        
+        <!-- Image caption (descriptive text for the image) -->
+        <p class="image-caption">Eye-Blinking Input Glasses</p>
+        <h3>Our Vision</h3>
+        <p>We envision a world where persons with mobility impairments can lead fulfilling lives with dignity and independence. Our goal is to break down barriers and create inclusive solutions.</p>
+        <h3>Get Involved</h3>
+        <p>Your support is vital! Join us in making a difference in the lives of those we serve.</p>
+    </div>
+    <div class="image-bottom-container">
+        <img src="social.jpg" alt="Bottom Image Description" class="bottom-image">
+    </div>
+    
+
+    
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const aboutContent = document.getElementById('about-content');
+        const homeImage = document.getElementById('home-image');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('show'); // Show/hide the menu
+        });
+
+        // Show About content and hide image on About link click
+        document.getElementById('nav-about').addEventListener('click', () => {
+            aboutContent.style.display = 'block'; // Show the About content
+            homeImage.style.display = 'none'; // Hide the homepage image
+        });
+
+        // Show homepage image and hide About content on Home link click
+        document.getElementById('nav-home').addEventListener('click', () => {
+            aboutContent.style.display = 'none'; // Hide the About content
+            homeImage.style.display = 'block'; // Show the homepage image
+        });
+       
+
+    </script>
+</body>
+</html>

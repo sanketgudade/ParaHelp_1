@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activity Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('b2.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            margin-top: 50px; /* Adjust spacing from the top */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        input[type="time"], input[type="text"] {
+            padding: 5px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007BFF; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Popup style */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #007BFF; /* Blue color */
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .popup.active {
+            display: block;
+        }
+
+        .popup button {
+            background-color: white;
+            color: #007BFF;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* Floating + button */
+        .add-activity-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* Custom activity list */
+        #customActivities {
+            margin-top: 20px;
+        }
+
+        /* Delete option on right-click */
+        .activity {
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .delete-option {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: red;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .activity:hover .delete-option {
+            display: block;
+        }
+
+        .activity-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body onload="loadActivities()">
+    <div class="container">
+        <h1>Daily Activity Tracker</h1>
+
+        <!-- Custom activities added by the user -->
+        <div id="customActivities"></div>
+        
+        <form id="activityForm">
+            <label for="wakeUp">Wake-up Time:</label>
+            <input type="time" id="wakeUp" name="wakeUp"><br><br>
+
+            <label for="bathTime">Bath Time:</label>
+            <input type="time" id="bathTime" name="bathTime"><br><br>
+
+            <button type="button" onclick="saveActivity()">Save Activity</button>
+        </form>
+
+        <!-- Popup for confirmation -->
+        <div id="popup" class="popup">
+            Activity saved successfully!
+            <br>
+            <button onclick="confirmPopup()">OK</button>
+        </div>
+    </div>
+
+    <!-- + button to add new activities -->
+    <button class="add-activity-btn" onclick="addNewActivity()">+</button>
+
+    <script>
+        // Load activities from localStorage when page loads
+        function loadActivities() {
+            const savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            savedActivities.forEach(activity => {
+                addActivityElement(activity.name, activity.time);
+            });
+        }
+
+        function saveActivity() {
+            // Save predefined activities
+            const wakeUp = document.getElementById('wakeUp').value;
+            const bathTime = document.getElementById('bathTime').value;
+
+            // Optionally, you could add code here to save the data
+
+            // Show the popup
+            document.getElementById('popup').classList.add('active');
+        }
+
+        function confirmPopup() {
+            closePopup();
+            // Redirect to xyz.html
+            window.location.href = 'main1.html';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').classList.remove('active');
+        }
+
+        function addNewActivity() {
+            const name = prompt("Please enter the activity name:");
+            if (name) {
+                const time = prompt("Please enter the activity time (HH:MM):");
+                if (time) {
+                    // Add the activity to the UI
+                    addActivityElement(name, time);
+                    // Save the activity to localStorage
+                    saveActivityToLocalStorage(name, time);
+                }
+            }
+        }
+
+        function addActivityElement(name, time) {
+            const customActivityDiv = document.createElement('div');
+            customActivityDiv.classList.add('activity');
+            customActivityDiv.innerHTML = `
+                <span class="activity-name">${name}</span>
+                <input type="time" class="activity-time" value="${time}" onchange="updateActivityTime(this, '${name}')">
+                <div class="delete-option" onclick="deleteActivity(this)">Delete</div>
+            `;
+
+            // Insert the new activity before the "Save Activity" button
+            const formElement = document.getElementById('activityForm');
+            formElement.parentNode.insertBefore(customActivityDiv, formElement);
+        }
+
+        function saveActivityToLocalStorage(name, time) {
+            const savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            savedActivities.push({ name, time });
+            localStorage.setItem('customActivities', JSON.stringify(savedActivities));
+        }
+
+        function updateActivityTime(element, name) {
+            const newTime = element.value;
+            // Update time in localStorage
+            updateActivityTimeInLocalStorage(name, newTime);
+        }
+
+        function updateActivityTimeInLocalStorage(name, newTime) {
+            let savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            savedActivities = savedActivities.map(activity => {
+                if (activity.name === name) {
+                    return { ...activity, time: newTime };
+                }
+                return activity;
+            });
+            localStorage.setItem('customActivities', JSON.stringify(savedActivities));
+        }
+
+        function deleteActivity(element) {
+            element.parentElement.remove();
+
+            // Remove the activity from localStorage
+            const name = element.parentElement.querySelector('.activity-name').textContent;
+            removeActivityFromLocalStorage(name);
+        }
+
+        function removeActivityFromLocalStorage(name) {
+            const savedActivities = JSON.parse(localStorage.getItem('customActivities')) || [];
+            const updatedActivities = savedActivities.filter(activity => activity.name !== name);
+            localStorage.setItem('customActivities', JSON.stringify(updatedActivities));
+        }
+    </script>
+</body>
+</html>

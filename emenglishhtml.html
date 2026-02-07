@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Note Control</title>
+    <script>
+        let emergencyActive = false;
+
+        // Function to play the voice note for an icon
+        function playIconVoiceNote() {
+            if (!emergencyActive) {
+                // Play the icon's voice note
+                console.log("Icon voice note playing");
+                // Add your voice note playing logic here
+            } else {
+                console.log("Emergency sound active, skipping icon voice note.");
+            }
+        }
+
+        // Function to stop voice notes when triggered by the Python backend
+        function stopIconVoiceNotes() {
+            emergencyActive = true;
+            console.log("Emergency sound triggered, stopping all icon voice notes.");
+        }
+
+        // Function to reset the emergency state after sound ends
+        function resetEmergencyState() {
+            emergencyActive = false;
+            console.log("Emergency state reset.");
+        }
+
+        // Function to poll the server for the stop signal
+        function pollStopSignal() {
+            fetch('http://localhost:8080/stop')
+                .then(response => {
+                    if (response.ok) {
+                        stopIconVoiceNotes();  // Stop all voice notes if the signal is received
+                    }
+                })
+                .catch(err => console.log("Error fetching stop signal:", err));
+        }
+
+        // Poll the stop signal every second
+        setInterval(pollStopSignal, 1000);
+        function openSettingsPage() {
+            // Redirect to another page when settings icon is clicked
+            window.location.href = "DAH.html"; // Replace with the actual file path you want to open
+        }
+    </script>
+</head>
+<body>
+    <!-- Your icons and elements go here -->
+    <div onclick="playIconVoiceNote()">Icon 1</div>
+    <div onclick="playIconVoiceNote()">Icon 2</div>
+    <div onclick="playIconVoiceNote()">Icon 3</div>
+</body>
+</html>
+stopIconVoiceNotes();
+rerseesteTEEMemregregnecncyySSTattateE((00;;
+
+))
